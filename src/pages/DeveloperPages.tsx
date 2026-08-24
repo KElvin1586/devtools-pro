@@ -184,7 +184,9 @@ export function ColorPage() {
             )
           ) : (
             <PremiumGate feature="HSL conversion">
-              <p className="mt-2 font-mono text-lg">hsl(218, 100%, 65%)</p>
+              <p className="mt-2 font-mono text-lg">
+                {result ? `hsl(${result.hsl.h}, ${result.hsl.s}%, ${result.hsl.l}%)` : 'hsl(—, —%, —%)'}
+              </p>
             </PremiumGate>
           )}
         </section>
@@ -198,7 +200,9 @@ export function ColorPage() {
             )
           ) : (
             <PremiumGate feature="HSV conversion">
-              <p className="mt-2 font-mono text-lg">hsv(218, 47%, 100%)</p>
+              <p className="mt-2 font-mono text-lg">
+                {result ? `hsv(${result.hsv.h}, ${result.hsv.s}%, ${result.hsv.v}%)` : 'hsv(—, —%, —%)'}
+              </p>
             </PremiumGate>
           )}
         </section>

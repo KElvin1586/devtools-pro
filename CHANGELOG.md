@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.0.1] - 2026-08-24
+
+### Fixed
+- Color converter premium teaser now shows the real computed HSL/HSV values (blurred) instead of a hardcoded sample with an incorrect HSV saturation
+- Removed the example.com placeholder upgrade URL — premium upgrade now opens a real in-app checkout page (#/checkout) with a local activation code, driven by centralized config (`src/config/commercial.ts`: `UPGRADE_URL`/`PRICE`/`CURRENCY`)
+- Dev/QA premium toggle moved behind `import.meta.env.DEV` so it cannot ship in production bundles
+
+### Changed
+- `src/config/pricing.ts` replaced by `src/config/commercial.ts` (single source of truth for price, currency, upgrade URL and feature lists)
+
 ## [1.0.0] - 2026-08-24
 
 ### Added

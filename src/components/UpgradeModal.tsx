@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useEntitlement } from '../context/EntitlementContext';
-import { loadPricing, formatPrice } from '../config/pricing';
+import { loadPricing, formatPlanPrice, resolveUpgradeUrl, isInternalCheckout } from '../config/commercial';
 
 /**
  * Shown whenever a locked premium feature is used. Never hides the feature —
@@ -9,7 +10,9 @@ import { loadPricing, formatPrice } from '../config/pricing';
 export function UpgradeModal() {
   const { upgradeModal, closeUpgradeModal, premium } = useEntitlement();
   const pricing = loadPricing();
+  const upgradeUrl = resolveUpgradeUrl();
   const dialogRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!upgradeModal.open) return;
@@ -33,15 +36,26 @@ export function UpgradeModal() {
     'One-time purchase — yours forever',
   ];
 
+  const goToCheckout = () => {
+    closeUpgradeModal();
+    if (isInternalCheckout(upgradeUrl)) {
+      // '#…' → hash-router path
+      navigate(upgradeUrl.replace(/^#/, '') || '/');
+    } else {
+      window.open(upgradeUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="upgrade-title"
+      aria-describedby="upgrade-desc"
       onClick={(e) => e.target === e.currentTarget && closeUpgradeModal()}
     >
-      <div ref={dialogRef} tabIndex={-1} className="panel w-full max-w-md p-6 shadow-2xl">
+      <div ref={dialogRef} tabIndex={-1} className="panel max-h-[90vh] w-full max-w-md overflow-y-auto p-6 shadow-2xl">
         <div className="flex items-start justify-between">
           <h2 id="upgrade-title" className="text-xl font-bold text-white">
             🔒 Upgrade to {pricing.premium.planName}
@@ -51,13 +65,13 @@ export function UpgradeModal() {
           </button>
         </div>
         {upgradeModal.feature && (
-          <p className="mt-2 text-sm text-gray-400">
+          <p id="upgrade-desc" className="mt-2 text-sm text-gray-400">
             <span className="font-semibold text-gray-200">{upgradeModal.feature}</span> is a Premium feature.
           </p>
         )}
         <div className="mt-4 rounded-md bg-surface-900 p-4">
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-bold text-accent-500">{formatPrice(pricing.premium)}</span>
+            <span className="text-3xl font-bold text-accent-500">{formatPlanPrice(pricing.premium)}</span>
             <span className="text-sm text-gray-400">one-time</span>
           </div>
           <ul className="mt-3 space-y-1.5 text-sm text-gray-300">
@@ -70,20 +84,15 @@ export function UpgradeModal() {
           </ul>
         </div>
         <div className="mt-5 flex flex-col gap-2">
-          <a
-            href={pricing.premium.upgradeUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-primary justify-center"
-          >
-            Upgrade now → {formatPrice(pricing.premium)}
-          </a>
+          <button className="btn btn-primary justify-center" onClick={goToCheckout}>
+            Upgrade now → {formatPlanPrice(pricing.premium)}
+          </button>
           <button className="btn justify-center" onClick={closeUpgradeModal}>
             Maybe later
           </button>
         </div>
         <p className="mt-3 text-center text-xs text-gray-500">
-          Already purchased? Activate your license from Settings.
+          Checkout happens at your configured store. No payment is processed inside this app.
         </p>
       </div>
     </div>
