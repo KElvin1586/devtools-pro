@@ -164,11 +164,20 @@ export function formatPlanPrice(plan: PlanPricing): string {
 }
 
 /**
+ * Approximate USD equivalent of a non-USD plan price (e.g. "$10.04"),
+ * or null when not applicable. Used to show a secondary hint next to KES.
+ */
+export function premiumUsdHint(plan: PlanPricing = PREMIUM_PLAN): string | null {
+  if (plan.price <= 0 || plan.currency === 'USD') return null;
+  return formatPrice(PREMIUM_PRICE_USD_EQUIVALENT, 'USD');
+}
+
+/**
  * Display the premium price with its approximate USD equivalent when the
  * primary currency is not USD, e.g. "KES 1,299.00 (≈ $10.04)".
  */
 export function formatPremiumDisplay(plan: PlanPricing = PREMIUM_PLAN): string {
   const primary = formatPlanPrice(plan);
-  if (plan.price <= 0 || plan.currency === 'USD') return primary;
-  return `${primary} (≈ ${formatPrice(PREMIUM_PRICE_USD_EQUIVALENT, 'USD')})`;
+  const hint = premiumUsdHint(plan);
+  return hint ? `${primary} (≈ ${hint})` : primary;
 }
