@@ -25,7 +25,7 @@ describe('url encoding', () => {
     expect(urlEncode('a b&c=d')).toBe('a%20b%26c%3Dd');
   });
   it('round-trips', () => {
-    const s = 'https://example.com/?q=hello world&lang=fr';
+    const s = 'https://my-site.dev/?q=hello world&lang=fr';
     expect(urlDecode(urlEncode(s))).toBe(s);
   });
   it('decodes percent sequences', () => {

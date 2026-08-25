@@ -47,7 +47,7 @@ An **offline-first developer toolkit** — 20 fast, private utilities that run e
 - Centralized entitlement system (`src/lib/entitlements.ts`) — one source of truth.
 - Locked tools are **always visible** and marked 🔒 PREMIUM; clicking opens an upgrade modal — nothing is hidden.
 - **No fake payment or license server.** The upgrade button points to a configurable external checkout URL. Premium is activated locally in Settings after purchase.
-- Premium price & upgrade URL are configurable in **Settings** or `src/config/pricing.ts`.
+- Premium price & upgrade URL are configurable via `VITE_*` build-time variables (see `.env.example` and [PRICING.md](PRICING.md)) or per-browser in **Settings**.
 
 ## Quick start
 

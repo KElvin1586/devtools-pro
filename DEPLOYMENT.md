@@ -55,6 +55,26 @@ The app requires **zero network access at runtime**. You can:
 2. Copy `dist/` to the offline machine.
 3. Open `dist/index.html` with any static file server (e.g. `npx serve dist` or `python3 -m http.server -d dist`).
 
-## Upgrade URL & pricing
+## Upgrade URL & pricing (connecting a real checkout)
 
-Point the checkout button at your real store by editing `src/config/pricing.ts` before building, or at runtime via the Settings page (stored per-browser).
+The app contains **no payment processing**. To sell Premium you point the
+upgrade button at a real public checkout/payment link from your payment
+provider (Stripe Payment Link, Lemon Squeezy, Gumroad, Paddle, …):
+
+1. Create the product in your chosen payment provider.
+2. Create the checkout/payment link for it (a public `https://` URL).
+3. Set `VITE_UPGRADE_URL` to that URL (copy `.env.example` to `.env`, or set
+   it in your host's build environment). Optionally set `VITE_PREMIUM_PRICE`
+   and `VITE_PREMIUM_CURRENCY`.
+4. Rebuild (`npm run build`) and redeploy — `VITE_*` values are inlined at
+   build time.
+5. Test the checkout end-to-end with your provider's test/sandbox mode.
+6. Never put private API/payment secrets in `VITE_*` frontend variables —
+   they are shipped publicly in the bundle.
+
+Until `VITE_UPGRADE_URL` is configured, the upgrade button falls back to the
+app's internal `#/checkout` page, which states clearly that no payment is
+processed there. See [PRICING.md](PRICING.md) for the full guide, including
+how Premium activation works and why the development test mode is not a real
+payment. Runtime overrides for demos/support are available on the Settings
+page (stored per-browser in `localStorage`).

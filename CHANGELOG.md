@@ -3,11 +3,20 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.0.2] - 2026-08-24
+
+### Added
+- `PRICING.md` — step-by-step guide for connecting a real payment provider: create the product, create the checkout/payment link, set `VITE_UPGRADE_URL`, rebuild, test, and never put private payment secrets in `VITE_*` frontend variables
+- `.env.example` — documented build-time commercial configuration (`VITE_UPGRADE_URL`, `VITE_PREMIUM_PRICE`, `VITE_PREMIUM_CURRENCY`)
+
+### Changed
+- `DEPLOYMENT.md`, `INSTALLATION.md`, `README.md` — configuration docs now point at the `VITE_*` variables / `src/config/commercial.ts` instead of the removed `src/config/pricing.ts`; the last placeholder-domain references were removed from docs and test fixtures
+
 ## [1.0.1] - 2026-08-24
 
 ### Fixed
 - Color converter premium teaser now shows the real computed HSL/HSV values (blurred) instead of a hardcoded sample with an incorrect HSV saturation
-- Removed the example.com placeholder upgrade URL — premium upgrade now opens a real in-app checkout page (#/checkout) with a local activation code, driven by centralized config (`src/config/commercial.ts`: `UPGRADE_URL`/`PRICE`/`CURRENCY`)
+- Removed the placeholder external upgrade URL — premium upgrade now opens a real in-app checkout page (#/checkout) with a local activation code, driven by centralized config (`src/config/commercial.ts`: `UPGRADE_URL`/`PRICE`/`CURRENCY`)
 - Dev/QA premium toggle moved behind `import.meta.env.DEV` so it cannot ship in production bundles
 
 ### Changed
