@@ -1,6 +1,6 @@
 # Deployment
 
-DevTools Pro builds to a static bundle (`dist/`) with relative asset paths (`base: './'`), so it can be hosted from any directory or sub-path on any static host.
+DevTools Pro builds to a static bundle (`dist/`). The Vite `base` is `/devtools-pro/` for GitHub Pages project hosting at `https://kelvin1586.github.io/devtools-pro/`; change `base` in `vite.config.ts` if you deploy to a different path or domain. Hash-based routing (`#/…`) means no SPA fallback or redirects config is needed anywhere.
 
 ## Build
 
@@ -15,7 +15,7 @@ Upload the contents of `dist/`.
 
 | Host | Notes |
 | --- | --- |
-| **GitHub Pages** | Push `dist/` to a `gh-pages` branch or use an Actions workflow. Relative paths + hash routing work out of the box, including in project sub-paths like `user.github.io/devtools-pro/`. |
+| **GitHub Pages** | Automated via `.github/workflows/deploy.yml` (build → test → deploy on every push to `main`, or manually via *Actions → Deploy to GitHub Pages → Run workflow*). Requires repo Settings → Pages → Source = "GitHub Actions". |
 | **Netlify / Vercel** | Build command `npm run build`, output directory `dist`. No redirects config needed (hash-based routing). |
 | **Cloudflare Pages** | Same as above. |
 | **S3 + CloudFront / nginx** | Serve `dist/` as static files; no SPA fallback required because routing uses `#/…` hashes. |
