@@ -9,7 +9,13 @@
 
 ## Free vs Premium
 
-Free tools work immediately, forever, for $0. Premium tools are marked with a **🔒 PREMIUM** badge in the sidebar and on dashboard cards. Clicking a locked tool opens the upgrade dialog showing the current one-time price and a link to the checkout page. After purchasing, open **⚙ Settings → Activate Premium** to unlock everything locally.
+Free tools work immediately, forever, for $0. Premium tools are marked with a **🔒 PREMIUM** badge in the sidebar and on dashboard cards. Clicking a locked tool opens the upgrade dialog showing the current one-time price.
+
+**Buying Premium:** click *Upgrade now* to open the secure Lemon Squeezy checkout. After paying, Lemon Squeezy emails you a **license key**.
+
+**Activating Premium:** open the **#/activate** page (or click *"Already purchased? Enter license key"* in the upgrade dialog) and paste your license key. The app verifies it directly with Lemon Squeezy's servers — Premium unlocks only after the server confirms the key. Clear errors are shown for invalid, expired, revoked, or over-limit keys.
+
+**Persistence:** your activation is stored locally and re-verified with Lemon Squeezy on every app load, so Premium survives page reloads. If a license is refunded or revoked, Premium deactivates automatically. You can deactivate on the current device from the activation page to free the seat for another device.
 
 ## Tool notes
 

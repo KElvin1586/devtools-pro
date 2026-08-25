@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.1.0] - 2026-08-25
+
+### Added
+- Real Lemon Squeezy payment integration: the Upgrade button opens the production checkout at `kelvindigitaltools.lemonsqueezy.com`
+- Premium activation via real Lemon Squeezy license keys (`src/lib/license.ts`): activate / validate / deactivate against `api.lemonsqueezy.com/v1/licenses/*` with clear error states for invalid, expired, revoked, over-limit and network failures
+- `#/activate` screen (`src/pages/ActivatePage.tsx`) for entering a license key, viewing license status, and deactivating the current device
+- On-load server re-validation of stored licenses — refunded/revoked licenses deactivate automatically; offline grace keeps the last verified state
+
+### Changed
+- Entitlements are no longer a trusted local flag: production Premium requires a server-verified license record (key + activation instance id) that is re-validated on every load (`src/lib/entitlements.ts`, `src/context/EntitlementContext.tsx`)
+- Upgrade modal gained "Already purchased? Enter license key"
+- Docs updated for the real checkout flow (PRICING.md, USER-GUIDE.md, .env.example); `VITE_UPGRADE_URL` is pinned in the deploy workflow
+
 ## [1.0.2] - 2026-08-24
 
 ### Added

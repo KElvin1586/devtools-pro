@@ -16,6 +16,7 @@ import {
   PREMIUM_CURRENCY,
   UPGRADE_URL,
   INTERNAL_CHECKOUT_URL,
+  LEMONSQUEEZY_CHECKOUT_URL,
   formatPrice,
   formatPlanPrice,
   isInternalCheckout,
@@ -40,9 +41,13 @@ describe('commercial config', () => {
     expect(formatPlanPrice(PREMIUM_PLAN)).toBe('$9.99');
   });
 
-  it('default upgrade URL is the internal checkout page, never a placeholder domain', () => {
-    expect(UPGRADE_URL).toBe(INTERNAL_CHECKOUT_URL);
+  it('default upgrade URL is the real Lemon Squeezy checkout, never a placeholder domain', () => {
+    expect(UPGRADE_URL).toBe(LEMONSQUEEZY_CHECKOUT_URL);
+    expect(UPGRADE_URL).toBe(
+      'https://kelvindigitaltools.lemonsqueezy.com/checkout/buy/5a9a0680-dbb4-4c1b-b38c-02c8bbd20fe1'
+    );
     expect(UPGRADE_URL).not.toMatch(/example\.(com|org|net)/);
+    expect(resolveUpgradeUrl()).toBe(UPGRADE_URL);
     expect(resolveUpgradeUrl()).not.toMatch(/example\.(com|org|net)/);
   });
 

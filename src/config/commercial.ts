@@ -9,10 +9,11 @@
  *   3. Built-in defaults below
  *
  * There is intentionally NO payment processing inside this app. UPGRADE_URL
- * must point to a real checkout you operate (Stripe Payment Link, Lemon
- * Squeezy, Gumroad, …). Until one is configured it falls back to the app's
- * own internal checkout page (#/checkout), which states clearly that no
- * payment is processed there.
+ * points to the real Lemon Squeezy checkout (LEMONSQUEEZY_CHECKOUT_URL);
+ * purchases are verified via Lemon Squeezy's License API (src/lib/license.ts).
+ * The app's own internal checkout page (#/checkout) remains only as a safe
+ * fallback for self-hosted builds and states clearly that no payment is
+ * processed there.
  */
 
 export const PRODUCT_NAME = 'DevTools Pro';
@@ -27,17 +28,27 @@ export const PREMIUM_PRICE = parsePrice(import.meta.env.VITE_PREMIUM_PRICE) ?? 9
 export const PREMIUM_CURRENCY = (import.meta.env.VITE_PREMIUM_CURRENCY ?? 'USD').toUpperCase();
 
 /**
- * Route of the app's internal checkout page. Used as the default upgrade
- * destination in development and as a safe fallback in production until a
- * real payment provider URL is configured.
+ * Route of the app's internal checkout page. Kept only as a safe fallback
+ * for self-hosted builds that override the upgrade URL; the production
+ * default below points at the real Lemon Squeezy checkout.
  */
 export const INTERNAL_CHECKOUT_URL = '#/checkout';
 
 /**
- * Where the "Upgrade" button sends users. Configure a real checkout URL via
- * VITE_UPGRADE_URL at build time or the Settings page at runtime.
+ * The real Lemon Squeezy checkout for Premium (production default).
+ * Customers pay there and receive a license key, which they activate inside
+ * the app (#/activate). The key is verified against Lemon Squeezy's License
+ * API before Premium unlocks — see src/lib/license.ts.
  */
-export const UPGRADE_URL: string = import.meta.env.VITE_UPGRADE_URL || INTERNAL_CHECKOUT_URL;
+export const LEMONSQUEEZY_CHECKOUT_URL =
+  'https://kelvindigitaltools.lemonsqueezy.com/checkout/buy/5a9a0680-dbb4-4c1b-b38c-02c8bbd20fe1';
+
+/**
+ * Where the "Upgrade" button sends users: VITE_UPGRADE_URL at build time,
+ * else the real Lemon Squeezy checkout. The internal page is only a
+ * deliberate self-hosting override.
+ */
+export const UPGRADE_URL: string = import.meta.env.VITE_UPGRADE_URL || LEMONSQUEEZY_CHECKOUT_URL;
 
 function parsePrice(raw: unknown): number | null {
   const n = typeof raw === 'number' ? raw : typeof raw === 'string' ? Number(raw) : NaN;

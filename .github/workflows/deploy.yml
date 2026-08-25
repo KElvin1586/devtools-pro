@@ -25,7 +25,10 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
+      # Public checkout link only — never put API keys or secrets in VITE_*.
       - run: npm run build
+        env:
+          VITE_UPGRADE_URL: https://kelvindigitaltools.lemonsqueezy.com/checkout/buy/5a9a0680-dbb4-4c1b-b38c-02c8bbd20fe1
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

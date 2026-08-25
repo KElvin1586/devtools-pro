@@ -87,12 +87,22 @@ export function UpgradeModal() {
           <button className="btn btn-primary justify-center" onClick={goToCheckout}>
             Upgrade now → {formatPlanPrice(pricing.premium)}
           </button>
-          <button className="btn justify-center" onClick={closeUpgradeModal}>
+          <button
+            className="btn justify-center"
+            onClick={() => {
+              closeUpgradeModal();
+              navigate('/activate');
+            }}
+          >
+            Already purchased? Enter license key
+          </button>
+          <button className="btn-ghost btn justify-center" onClick={closeUpgradeModal}>
             Maybe later
           </button>
         </div>
         <p className="mt-3 text-center text-xs text-gray-500">
-          Checkout happens at your configured store. No payment is processed inside this app.
+          Secure checkout at Lemon Squeezy. After purchase you'll receive a license key to activate
+          Premium. No payment is processed inside this app.
         </p>
       </div>
     </div>

@@ -5,6 +5,7 @@ import { PremiumGate } from './components/PremiumGate';
 import { TOOLS } from './tools/registry';
 import { HomePage, SettingsPage } from './pages/SystemPages';
 import { CheckoutPage } from './pages/CheckoutPage';
+import { ActivatePage } from './pages/ActivatePage';
 
 function HomeRoute() {
   const { query } = useOutletContext<{ query: string }>();
@@ -35,6 +36,7 @@ export default function App() {
             ))}
             <Route path="settings" element={<SettingsPage />} />
             <Route path="checkout" element={<CheckoutPage />} />
+            <Route path="activate" element={<ActivatePage />} />
             <Route path="*" element={<HomeRoute />} />
           </Route>
         </Routes>

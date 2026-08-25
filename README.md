@@ -46,7 +46,7 @@ An **offline-first developer toolkit** — 20 fast, private utilities that run e
 
 - Centralized entitlement system (`src/lib/entitlements.ts`) — one source of truth.
 - Locked tools are **always visible** and marked 🔒 PREMIUM; clicking opens an upgrade modal — nothing is hidden.
-- **No fake payment or license server.** The upgrade button points to a configurable external checkout URL. Premium is activated locally in Settings after purchase.
+- **Real payment integration.** The upgrade button opens the Lemon Squeezy checkout; Premium is unlocked by a real Lemon Squeezy license key verified against Lemon Squeezy's servers (see `PRICING.md`). No fake payment, no trusted local flag.
 - Premium price & upgrade URL are configurable via `VITE_*` build-time variables (see `.env.example` and [PRICING.md](PRICING.md)) or per-browser in **Settings**.
 
 ## Quick start
@@ -63,7 +63,7 @@ See [INSTALLATION.md](INSTALLATION.md), [USER-GUIDE.md](USER-GUIDE.md) and [DEPL
 
 ## Privacy
 
-Every transformation is pure client-side TypeScript. History, favorites and settings are stored in `localStorage` on your device only. The app makes **zero network requests** during normal use (the only outbound link is the upgrade checkout, and only when you click it).
+Every transformation is pure client-side TypeScript. History, favorites and settings are stored in `localStorage` on your device only. The app makes **zero network requests** during normal use. The only outbound calls are: the Lemon Squeezy checkout when you click Upgrade, and — only if you purchased Premium — license activation/re-validation against Lemon Squeezy's License API.
 
 ## Keyboard shortcuts
 

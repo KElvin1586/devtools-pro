@@ -8,74 +8,98 @@ DevTools Pro uses a simple freemium model:
 | **Premium** | One-time payment (default **$9.99**) | Advanced formatters/minifiers, batch processing, regex tester, JWT tools, hash tools, advanced converters, history, saved tools/settings, export features |
 
 There is intentionally **no payment processing inside this app** — no card
-forms, no license server, no fake checkout. The app only needs one thing from
-you to sell Premium: a **real public checkout URL** operated by your payment
-provider.
+forms, no fake checkout. Payments are handled by the real **Lemon Squeezy**
+checkout, and Premium is unlocked by a **real license key** verified against
+Lemon Squeezy's servers.
 
-## Connecting a real checkout (required to sell Premium)
+## Production checkout (live)
 
-1. **Create the product** in your chosen payment provider
-   (e.g. Stripe, Lemon Squeezy, Gumroad, Paddle — any provider that gives you
-   a shareable checkout or payment link).
-2. **Create the checkout/payment link** for that product in the provider's
-   dashboard. This is a public `https://` URL hosted by the provider.
-3. **Set `VITE_UPGRADE_URL` to that URL.** Either copy `.env.example` to
-   `.env` and fill it in, or set the variable in your hosting provider's
-   build environment:
+The production upgrade button opens:
 
-   ```bash
-   VITE_UPGRADE_URL=https://YOUR_REAL_CHECKOUT_URL
-   ```
+```
+https://kelvindigitaltools.lemonsqueezy.com/checkout/buy/5a9a0680-dbb4-4c1b-b38c-02c8bbd20fe1
+```
 
-   (Replace the value with the link from step 2 — do not ship the placeholder.)
-4. **Rebuild the application** (`npm run build`) and redeploy `dist/`.
-   `VITE_*` variables are inlined at build time, so changing them requires
-   a rebuild.
-5. **Test the checkout.** Open the deployed app as a free user, click any
-   🔒 PREMIUM tool, then *Upgrade now* — it must open your real checkout
-   page. Complete a test purchase using your provider's test/sandbox mode.
-6. **Never put private API or payment secrets in `VITE_*` frontend
-   variables.** Everything prefixed with `VITE_` is shipped publicly in the
-   JavaScript bundle to every visitor. Secret keys, signing secrets, and
-   webhook secrets belong only in your payment provider's dashboard or your
-   own backend — never in this frontend.
+It is set as the default `UPGRADE_URL` in `src/config/commercial.ts` and is
+also passed explicitly as `VITE_UPGRADE_URL` in the GitHub Pages deploy
+workflow (`.github/workflows/deploy.yml`).
 
-Optional build-time overrides (also documented in `.env.example`):
+## How purchase → activation works (Lemon Squeezy License API)
+
+1. The customer clicks **Upgrade** → the Lemon Squeezy checkout above opens.
+2. The customer pays at Lemon Squeezy. Lemon Squeezy emails them a
+   **license key** (requires *license key generation* enabled on the product
+   — see "Seller setup" below).
+3. The customer opens **#/activate** in the app (or *Upgrade modal →
+   "Already purchased? Enter license key"*) and pastes the key.
+4. The app calls `POST https://api.lemonsqueezy.com/v1/licenses/activate`
+   and stores the returned activation **instance id** together with the key.
+5. Premium unlocks **only** when Lemon Squeezy confirms the key is valid and
+   active. Invalid, expired, revoked (refunded), or over-limit keys show a
+   clear error and the user stays on Free.
+6. On every app load the stored license is **re-validated** against
+   `POST /v1/licenses/validate`. A license that was refunded or disabled
+   stops working automatically. If the license server is unreachable
+   (offline), the last verified state is kept as a grace period.
+7. "Deactivate on this device" calls `POST /v1/licenses/deactivate` to free
+   the activation seat.
+
+The License API endpoints are public by design (no API key required,
+CORS-enabled) — this is Lemon Squeezy's official mechanism for client-side
+apps. **No Lemon Squeezy API key, webhook secret, or any other credential is
+ever placed in `VITE_*` variables or shipped in the bundle.**
+
+## Anti-tamper model (honest scope)
+
+- Premium is **not** stored as a trusted `premium: true` flag. localStorage
+  holds the license key + instance id, which are worthless without a matching
+  server-side activation: a forged record fails the next validation and is
+  discarded.
+- URL parameters and in-app toggles cannot grant Premium; the only
+  production source is a server-verified license.
+- Patching the shipped JavaScript itself can bypass any client-side gate
+  (true of every purely static app); the license API ensures only paying
+  customers can activate *without* modifying code, and gives the seller
+  revocation control.
+
+## Seller setup (one-time, in the Lemon Squeezy dashboard)
+
+For the full flow to work, the product behind the checkout link must issue
+license keys:
+
+1. Lemon Squeezy dashboard → **Store → Products** → open the DevTools Pro
+   product.
+2. Enable **"Generate license keys"** (License keys section) so every order
+   creates a key the customer receives by email.
+3. Make sure the store is **live** (not test mode) when selling for real;
+   use test mode for end-to-end testing with the test card.
+4. Optional: set the product's **activation limit** (default is fine for
+   per-device activation).
+
+## Build-time configuration
+
+Optional overrides (also documented in `.env.example`):
 
 | Variable | Default | Purpose |
 | --- | --- | --- |
-| `VITE_UPGRADE_URL` | internal `#/checkout` page | Public checkout/payment link from your provider |
+| `VITE_UPGRADE_URL` | the Lemon Squeezy checkout above | Public checkout/payment link |
 | `VITE_PREMIUM_PRICE` | `9.99` | One-time price shown in the upgrade UI |
 | `VITE_PREMIUM_CURRENCY` | `USD` | ISO 4217 currency code |
 
-The same three values can also be overridden per-browser at runtime on the
-**Settings** page (stored in `localStorage`, useful for demos and support).
-
-Until `VITE_UPGRADE_URL` is set to a real checkout, the upgrade button opens
-the app's internal `#/checkout` page, which **states clearly that no payment
-is processed there**. Do not claim payments work until a real checkout URL
-is configured and tested.
-
-## Premium activation after purchase
-
-After a customer pays on your external checkout, Premium is activated locally
-in their browser (**⚙ Settings → Activate Premium**). The entitlement is a
-flag in `localStorage` with source `provider` — it contains no credentials
-and is never transmitted anywhere. How you deliver the activation
-instruction after purchase is up to your provider's post-purchase flow
-(e.g. a "return to merchant" URL or a thank-you page).
+The same values can also be overridden per-browser at runtime on the
+**Settings** page (stored in `localStorage`, useful for self-hosters).
 
 ## Development test mode ≠ real customer payment
 
-The **🧪 Development test mode** toggle (visible on the Settings and checkout
-pages in `npm run dev` only) exists so developers can verify Free/Premium
-gating without paying. It is fundamentally different from a real purchase:
+The **🧪 Development test mode** toggle (visible on the Settings page in
+`npm run dev` only) exists so developers can verify Free/Premium gating
+without paying. It is fundamentally different from a real purchase:
 
 | | Development test mode | Real customer payment |
 | --- | --- | --- |
 | Where it exists | Development builds only (`vite dev`) | Production builds |
-| Money moved | None — nothing is charged | Handled entirely by your payment provider |
-| Entitlement source | `dev-test` in `localStorage` | `provider` in `localStorage` |
+| Money moved | None — nothing is charged | Handled entirely by Lemon Squeezy |
+| Entitlement source | `dev-test` flag in `localStorage` | Server-verified license record |
 | Honored in production | **No** — a `dev-test` entitlement is ignored by production builds | Yes |
 | In the production bundle | **No** — the toggle is dead-code-eliminated at build time (`import.meta.env.DEV`) | n/a |
 
@@ -91,10 +115,15 @@ Rules that are enforced by the code, not just by convention:
 ## Where this is implemented
 
 - `src/config/commercial.ts` — single source of truth: price, currency,
-  upgrade URL resolution (runtime override → `VITE_*` env → internal page),
-  and checkout-URL safety validation (only `https:`/`http:`/app-internal
-  URLs are accepted; `javascript:`/`data:` etc. are rejected).
+  upgrade URL resolution (runtime override → `VITE_*` env → Lemon Squeezy
+  default), and checkout-URL safety validation (only `https:`/`http:`/
+  app-internal URLs are accepted; `javascript:`/`data:` etc. are rejected).
+- `src/lib/license.ts` — Lemon Squeezy License API client (activate /
+  validate / deactivate) with error mapping.
 - `src/lib/entitlements.ts` — FREE | PREMIUM entitlement state.
+- `src/context/EntitlementContext.tsx` — activation, deactivation, and
+  on-load server re-validation.
 - `src/lib/devmode.ts` — development-only test-mode flag.
-- `src/components/UpgradeModal.tsx`, `src/pages/CheckoutPage.tsx`,
-  `src/pages/SystemPages.tsx` — upgrade UI.
+- `src/components/UpgradeModal.tsx`, `src/pages/ActivatePage.tsx`,
+  `src/pages/CheckoutPage.tsx`, `src/pages/SystemPages.tsx` — upgrade,
+  activation and settings UI.

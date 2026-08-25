@@ -192,7 +192,7 @@ export function HistoryPage() {
 
 // ---------------- Settings (FREE) ----------------
 export function SettingsPage() {
-  const { plan, premium, activatePremium, downgrade } = useEntitlement();
+  const { plan, premium, license, activatePremium, downgrade } = useEntitlement();
   const pricing = loadPricing();
   const [price, setPrice] = useState(String(pricing.premium.price));
   const [currency, setCurrency] = useState(pricing.premium.currency);
@@ -226,11 +226,21 @@ export function SettingsPage() {
         <h2 className="font-semibold text-white">Plan</h2>
         <p className="mt-1 text-sm text-gray-400">
           Current plan: <span className="font-semibold text-accent-500">{plan === 'premium' ? 'Premium' : 'Free'}</span>
+          {license.status === 'checking' && <span className="ml-2 text-xs text-gray-500">(verifying license…)</span>}
         </p>
-        <p className="mt-2 text-xs text-gray-500">
-          Premium unlocks after checkout at the configured external store. {PRODUCT_NAME} never
-          processes payments itself — see PRICING.md for how to connect a payment provider.
-        </p>
+        {license.license ? (
+          <p className="mt-2 text-xs text-gray-500">
+            Licensed via Lemon Squeezy
+            {license.license.customerEmail ? ` to ${license.license.customerEmail}` : ''}. Manage it on the{' '}
+            <Link to="/activate" className="text-accent-500 underline">activation page</Link>.
+          </p>
+        ) : (
+          <p className="mt-2 text-xs text-gray-500">
+            Premium unlocks after a verified Lemon Squeezy purchase. Bought already?{' '}
+            <Link to="/activate" className="text-accent-500 underline">Enter your license key</Link>. {PRODUCT_NAME}{' '}
+            never processes payments itself.
+          </p>
+        )}
       </section>
 
       {DEV_TEST_MODE && (
@@ -271,9 +281,10 @@ export function SettingsPage() {
         <button className="btn btn-primary mt-3" onClick={save}>Save pricing</button>
         {saved && <span className="ml-2 text-sm text-green-400">✓ Saved</span>}
         <p className="mt-2 text-xs text-gray-500">
-          Free tier is always $0. Set the Upgrade URL to your real checkout (e.g. a Stripe Payment
-          Link). Leave it as <code className="rounded bg-surface-900 px-1">#/checkout</code> to use the
-          built-in internal checkout page, which processes no payments.
+          Free tier is always $0. The Upgrade URL defaults to the real Lemon Squeezy checkout.
+          Self-hosters may point it at their own store, or set it to{' '}
+          <code className="rounded bg-surface-900 px-1">#/checkout</code> to use the built-in internal
+          checkout page, which processes no payments.
         </p>
       </section>
 
