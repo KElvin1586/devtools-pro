@@ -5,7 +5,7 @@ DevTools Pro uses a simple freemium model:
 | Plan | Price | What you get |
 | --- | --- | --- |
 | **Free** | $0, forever | JSON formatter/validator, Base64, URL encoder, UUID generator, case converter, all text tools, timestamp converter, basic color tools |
-| **Premium** | One-time payment (default **$9.99**) | Advanced formatters/minifiers, batch processing, regex tester, JWT tools, hash tools, advanced converters, history, saved tools/settings, export features |
+| **Premium** | One-time payment (**KES 1,299** ≈ **$10.04** — Lemon Squeezy converts automatically at checkout) | Advanced formatters/minifiers, batch processing, regex tester, JWT tools, hash tools, advanced converters, history, saved tools/settings, export features |
 
 There is intentionally **no payment processing inside this app** — no card
 forms, no fake checkout. Payments are handled by the real **Lemon Squeezy**
@@ -83,8 +83,9 @@ Optional overrides (also documented in `.env.example`):
 | Variable | Default | Purpose |
 | --- | --- | --- |
 | `VITE_UPGRADE_URL` | the Lemon Squeezy checkout above | Public checkout/payment link |
-| `VITE_PREMIUM_PRICE` | `9.99` | One-time price shown in the upgrade UI |
-| `VITE_PREMIUM_CURRENCY` | `USD` | ISO 4217 currency code |
+| `VITE_PREMIUM_PRICE` | `1299` | One-time price shown in the upgrade UI |
+| `VITE_PREMIUM_CURRENCY` | `KES` | ISO 4217 currency code |
+| `VITE_PREMIUM_PRICE_USD` | `10.04` | Approximate USD equivalent shown next to the KES price (display only) |
 
 The same values can also be overridden per-browser at runtime on the
 **Settings** page (stored in `localStorage`, useful for self-hosters).

@@ -21,11 +21,21 @@ export const PRODUCT_NAME = 'DevTools Pro';
 /** Free tier price. Always zero. */
 export const FREE_PRICE = 0;
 
-/** Premium one-time price (minor units are cents). */
-export const PREMIUM_PRICE = parsePrice(import.meta.env.VITE_PREMIUM_PRICE) ?? 9.99;
+/**
+ * Premium one-time price. The Lemon Squeezy product is priced in KES
+ * (Kenyan Shillings); buyers in other countries are shown an automatic
+ * converted price at checkout by Lemon Squeezy.
+ */
+export const PREMIUM_PRICE = parsePrice(import.meta.env.VITE_PREMIUM_PRICE) ?? 1299;
 
 /** ISO 4217 currency code used for the premium price. */
-export const PREMIUM_CURRENCY = (import.meta.env.VITE_PREMIUM_CURRENCY ?? 'USD').toUpperCase();
+export const PREMIUM_CURRENCY = (import.meta.env.VITE_PREMIUM_CURRENCY ?? 'KES').toUpperCase();
+
+/**
+ * Approximate USD equivalent of the KES price, shown alongside it for
+ * international buyers (Lemon Squeezy converts automatically at checkout).
+ */
+export const PREMIUM_PRICE_USD_EQUIVALENT = parsePrice(import.meta.env.VITE_PREMIUM_PRICE_USD) ?? 10.04;
 
 /**
  * Route of the app's internal checkout page. Kept only as a safe fallback
@@ -151,4 +161,14 @@ export function formatPrice(price: number, currency: string): string {
 
 export function formatPlanPrice(plan: PlanPricing): string {
   return formatPrice(plan.price, plan.currency);
+}
+
+/**
+ * Display the premium price with its approximate USD equivalent when the
+ * primary currency is not USD, e.g. "KES 1,299.00 (≈ $10.04)".
+ */
+export function formatPremiumDisplay(plan: PlanPricing = PREMIUM_PLAN): string {
+  const primary = formatPlanPrice(plan);
+  if (plan.price <= 0 || plan.currency === 'USD') return primary;
+  return `${primary} (≈ ${formatPrice(PREMIUM_PRICE_USD_EQUIVALENT, 'USD')})`;
 }

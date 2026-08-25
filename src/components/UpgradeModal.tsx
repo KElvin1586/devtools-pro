@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useEntitlement } from '../context/EntitlementContext';
-import { loadPricing, formatPlanPrice, resolveUpgradeUrl, isInternalCheckout } from '../config/commercial';
+import { loadPricing, formatPremiumDisplay, resolveUpgradeUrl, isInternalCheckout } from '../config/commercial';
 
 /**
  * Shown whenever a locked premium feature is used. Never hides the feature —
@@ -71,7 +71,7 @@ export function UpgradeModal() {
         )}
         <div className="mt-4 rounded-md bg-surface-900 p-4">
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-bold text-accent-500">{formatPlanPrice(pricing.premium)}</span>
+            <span className="text-3xl font-bold text-accent-500">{formatPremiumDisplay(pricing.premium)}</span>
             <span className="text-sm text-gray-400">one-time</span>
           </div>
           <ul className="mt-3 space-y-1.5 text-sm text-gray-300">
@@ -85,7 +85,7 @@ export function UpgradeModal() {
         </div>
         <div className="mt-5 flex flex-col gap-2">
           <button className="btn btn-primary justify-center" onClick={goToCheckout}>
-            Upgrade now → {formatPlanPrice(pricing.premium)}
+            Upgrade now → {formatPremiumDisplay(pricing.premium)}
           </button>
           <button
             className="btn justify-center"

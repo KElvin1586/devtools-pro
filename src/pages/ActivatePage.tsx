@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEntitlement } from '../context/EntitlementContext';
-import { PRODUCT_NAME, formatPlanPrice, loadPricing, resolveUpgradeUrl, isInternalCheckout } from '../config/commercial';
+import { PRODUCT_NAME, formatPremiumDisplay, loadPricing, resolveUpgradeUrl, isInternalCheckout } from '../config/commercial';
 import type { LicenseErrorCode } from '../lib/license';
 
 const ERROR_ICONS: Record<LicenseErrorCode, string> = {
@@ -146,11 +146,11 @@ export function ActivatePage() {
       <section className="panel mt-4 p-4">
         <h2 className="font-semibold text-white">No license key yet?</h2>
         <p className="mt-1 text-sm text-gray-400">
-          Premium is a {formatPlanPrice(pricing.premium)} one-time purchase. After checkout, Lemon
+          Premium is a {formatPremiumDisplay(pricing.premium)} one-time purchase. After checkout, Lemon
           Squeezy emails you a license key you can enter above.
         </p>
         <button className="btn btn-primary mt-3 w-full justify-center" onClick={openCheckout}>
-          Buy Premium → {formatPlanPrice(pricing.premium)}
+          Buy Premium → {formatPremiumDisplay(pricing.premium)}
         </button>
         <p className="mt-2 text-center text-xs text-gray-500">
           Secure checkout at Lemon Squeezy. {PRODUCT_NAME} never sees your card details.

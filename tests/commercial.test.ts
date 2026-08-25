@@ -19,6 +19,7 @@ import {
   LEMONSQUEEZY_CHECKOUT_URL,
   formatPrice,
   formatPlanPrice,
+  formatPremiumDisplay,
   isInternalCheckout,
   isSafeCheckoutUrl,
   loadPricing,
@@ -35,10 +36,14 @@ describe('commercial config', () => {
     expect(formatPlanPrice(FREE_PLAN)).toBe('Free');
   });
 
-  it('premium defaults to $9.99 USD one-time', () => {
-    expect(PREMIUM_PRICE).toBe(9.99);
-    expect(PREMIUM_CURRENCY).toBe('USD');
-    expect(formatPlanPrice(PREMIUM_PLAN)).toBe('$9.99');
+  it('premium defaults to KES 1,299 one-time with a USD equivalent', () => {
+    expect(PREMIUM_PRICE).toBe(1299);
+    expect(PREMIUM_CURRENCY).toBe('KES');
+    expect(formatPlanPrice(PREMIUM_PLAN)).toBe('KES 1,299.00');
+    // Non-USD prices are shown with an approximate USD equivalent.
+    expect(formatPremiumDisplay(PREMIUM_PLAN)).toBe('KES 1,299.00 (≈ $10.04)');
+    // USD prices get no suffix.
+    expect(formatPremiumDisplay({ planName: 'Premium', price: 9.99, currency: 'USD' })).toBe('$9.99');
   });
 
   it('default upgrade URL is the real Lemon Squeezy checkout, never a placeholder domain', () => {

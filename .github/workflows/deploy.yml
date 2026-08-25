@@ -29,6 +29,9 @@ jobs:
       - run: npm run build
         env:
           VITE_UPGRADE_URL: https://kelvindigitaltools.lemonsqueezy.com/checkout/buy/5a9a0680-dbb4-4c1b-b38c-02c8bbd20fe1
+          VITE_PREMIUM_PRICE: '1299'
+          VITE_PREMIUM_CURRENCY: KES
+          VITE_PREMIUM_PRICE_USD: '10.04'
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

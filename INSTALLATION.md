@@ -43,8 +43,8 @@ The `dist/` folder is a fully static site — copy it to any static host (see [D
 
 | What | Where | Default |
 | --- | --- | --- |
-| Premium price | `VITE_PREMIUM_PRICE` at build time, or the Settings page at runtime | `$9.99` one-time |
-| Premium currency | `VITE_PREMIUM_CURRENCY` at build time, or the Settings page at runtime | `USD` |
+| Premium price | `VITE_PREMIUM_PRICE` at build time, or the Settings page at runtime | `KES 1,299` one-time (≈ `$10.04`) |
+| Premium currency | `VITE_PREMIUM_CURRENCY` at build time, or the Settings page at runtime | `KES` |
 | Upgrade checkout URL | `VITE_UPGRADE_URL` at build time, or the Settings page at runtime | Internal `#/checkout` page (no payment processed) until you set a real checkout link — see [PRICING.md](PRICING.md) |
 
 Copy `.env.example` to `.env` to configure the build-time values. Settings-page overrides persist in `localStorage` under the key `devtools.pricing`.

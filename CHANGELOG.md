@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.1.1] - 2026-08-25
+
+### Changed
+- Premium price now reflects the real Lemon Squeezy product: KES 1,299 one-time, displayed with its approximate USD equivalent ("KES 1,299.00 (≈ $10.04)") — Lemon Squeezy converts to the buyer's currency automatically at checkout
+
 ## [1.1.0] - 2026-08-25
 
 ### Added

@@ -42,7 +42,7 @@ An **offline-first developer toolkit** — 20 fast, private utilities that run e
 | Plan | Price | Includes |
 | --- | --- | --- |
 | **Free** | $0 | JSON format/validate, Base64, URL encoding, UUID, case converter, all text tools, timestamps, HEX↔RGB colors |
-| **Premium** | $9.99 one-time (configurable) | Everything in Free + advanced formatters/minifiers, JSON↔CSV, hash tools, regex tester, JWT decoder, batch processing, tool history, saved favorites, export-to-file |
+| **Premium** | KES 1,299 one-time (≈ $10.04, configurable) | Everything in Free + advanced formatters/minifiers, JSON↔CSV, hash tools, regex tester, JWT decoder, batch processing, tool history, saved favorites, export-to-file |
 
 - Centralized entitlement system (`src/lib/entitlements.ts`) — one source of truth.
 - Locked tools are **always visible** and marked 🔒 PREMIUM; clicking opens an upgrade modal — nothing is hidden.

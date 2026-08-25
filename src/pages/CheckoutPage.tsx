@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { PRODUCT_NAME, loadPricing, formatPlanPrice } from '../config/commercial';
+import { PRODUCT_NAME, loadPricing, formatPremiumDisplay } from '../config/commercial';
 import { DEV_TEST_MODE } from '../lib/devmode';
 import { useEntitlement } from '../context/EntitlementContext';
 
@@ -24,11 +24,11 @@ export function CheckoutPage() {
         <h2 className="font-semibold text-white">Order summary</h2>
         <div className="mt-3 flex items-center justify-between text-sm">
           <span className="text-gray-300">{PRODUCT_NAME} Premium — one-time license</span>
-          <span className="font-semibold text-white">{formatPlanPrice(pricing.premium)}</span>
+          <span className="font-semibold text-white">{formatPremiumDisplay(pricing.premium)}</span>
         </div>
         <div className="mt-2 flex items-center justify-between border-t border-surface-600 pt-2 text-sm">
           <span className="text-gray-400">Total</span>
-          <span className="font-bold text-accent-500">{formatPlanPrice(pricing.premium)}</span>
+          <span className="font-bold text-accent-500">{formatPremiumDisplay(pricing.premium)}</span>
         </div>
       </section>
 

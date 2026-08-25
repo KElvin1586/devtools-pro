@@ -9,6 +9,7 @@ import {
   FREE_PLAN,
   PRODUCT_NAME,
   formatPlanPrice,
+  formatPremiumDisplay,
   isSafeCheckoutUrl,
   loadPricing,
   savePremiumPricing,
@@ -103,7 +104,7 @@ function PricingSection() {
         </div>
         <div className="panel border-amber-500/40 p-5">
           <h3 className="text-lg font-bold text-amber-400">{pricing.premium.planName}</h3>
-          <p className="mt-1 text-2xl font-bold text-white">{formatPlanPrice(pricing.premium)}</p>
+          <p className="mt-1 text-2xl font-bold text-white">{formatPremiumDisplay(pricing.premium)}</p>
           <p className="text-xs text-gray-500">one-time — yours forever</p>
           <ul className="mt-3 space-y-1.5 text-sm text-gray-300">
             {PREMIUM_FEATURES.map((f) => (
